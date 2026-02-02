@@ -2,15 +2,21 @@ import './App.scss';
 
 import postsFromServer from './api/posts.json';
 import usersFromServer from './api/users.json';
+import commentsFromServer from './api/comments.json';
 import { PostList } from './components/PostList/PostList';
 
 function getUserById(userId) {
   return usersFromServer.find(user => user.id === userId) || null;
 }
 
-export const postsLists = postsFromServer.map(todo => ({
-  ...todo,
-  user: getUserById(todo.userId),
+function getCommentsByPostId(postId) {
+  return commentsFromServer.filter(comment => comment.postId === postId);
+}
+
+export const postsLists = postsFromServer.map(post => ({
+  ...post,
+  user: getUserById(post.userId),
+  comments: getCommentsByPostId(post.id),
 }));
 
 export const App = () => (
